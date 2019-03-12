@@ -1,0 +1,30 @@
+{
+  "name": "mozu-test-harness",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node -r esm ./test.js",
+    "debugTest": "node --nolazy -r esm --inspect-brk=9229 ./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spintronics/mozu-test-harness.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spintronics/mozu-test-harness/issues"
+  },
+  "homepage": "https://github.com/spintronics/mozu-test-harness#readme",
+  "devDependencies": {
+    "esm": "^3.2.10",
+    "prettier": "^1.16.4"
+  },
+  "dependencies": {
+    "fluture": "^10.3.1",
+    "puppeteer": "^1.13.0",
+    "ramda": "^0.26.1"
+  }
+}
