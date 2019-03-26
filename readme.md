@@ -22,7 +22,6 @@ Testing changes by hand (especially on the front-end) is highly inefficient. Reg
   ```
 - browser extension for listening to events & translating to commands
 - parallelizable / composable
-- interaction with exposed theme / storefront SDK behaviors
 - mock / cached responses for api calls
 - randomization
 - scheduling
