@@ -1,8 +1,9 @@
-import { browser, page } from './puppet'
+import { browser, page, Puppet } from './puppet'
 import R from 'ramda'
 import * as util from './util'
 import puppeteer from 'puppeteer'
 import Future from 'fluture'
+import profile from './profile'
 
 const { log, State, composeF } = util
 
@@ -19,10 +20,14 @@ const context = State(
 const withBrowser = context.withProp(context.keys.headyBrowser)
 const withPage = context.withProp(context.keys.page)
 
+let puppet = Puppet(profile, context)
+
+// puppet.login().fork(console.error, console.log)
+
 let google = composeF(
   c => Future.after(10000, log(context)),
-  withPage(page.goto.a1('https://google.com')),
-
+  puppet.login,
+  withPage(page.goto.a1(profile.baseUrl)),
   withBrowser(
     compose(
       map(Future.of),

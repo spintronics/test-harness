@@ -1,4 +1,5 @@
 import R from 'ramda'
+import Future from 'fluture'
 
 const { curry, compose } = R
 
@@ -49,6 +50,8 @@ export const composeF = (...fns) => compose.apply(R, R.map(R.chain, fns))
 
 export const id = x => x
 export const isFn = x => 'function' === typeof x
+export const isStr = x => 'string' === typeof x
+export const isObj = x => R.type(x) === 'Object'
 
 //proto
 export const keyMapWith = curry((f, keys) =>
@@ -60,6 +63,33 @@ export const defineGetter = curry((get, key, obj) => {
     get
   })
 })
+
+export const invoke = R.curryN(2, (wrap = x => x, key, ...args) =>
+  wrap(obj => {
+    let lens = R[key instanceof Array ? 'lensPath' : 'lensProp'](key)
+    let fn = R.view(lens, obj)
+    if (!obj || !key || !isFn(fn)) {
+      return `invalid invocation: (${obj},${key},[${args.join(',')}])`
+    }
+    return fn(args)
+  })
+)
+
+export const invokeId = invoke(undefined)
+
+export const invokeFuture = invoke(invoker => obj =>
+  Future((reject, resolve) => {
+    try {
+      let result = invoker(obj)
+      if ('string' === typeof result && result.startsWith('invalid invocation'))
+        return reject(result)
+      if (!result || !(result instanceof Promise)) return resolve(result)
+      result.then(resolve, reject)
+    } catch (e) {
+      reject(e)
+    }
+  })
+)
 
 export const State = (initialState = {}, impure = false) => {
   let _state
